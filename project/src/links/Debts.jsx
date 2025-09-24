@@ -5,7 +5,7 @@ import { PiMoonStarsLight } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 
 function Debts(){
-const Valuecheck = useStates((s) => s.Valuecheck)
+const Valuecheck = useStates((s) => s.value)
   const getStatus = useStates((s) => s.Value)
   const status = getStatus(Valuecheck)
   const Savings = useStates((s) => s.Savings)
@@ -25,7 +25,7 @@ const Valuecheck = useStates((s) => s.Valuecheck)
           <p className="AccountsTitle">I owe money</p>
           <span className={colorMap[status]}>{Valuecheck}$</span>
         </div>
-         <div className="w-max ml-3">
+         <div className="ml-3">
               <div className="cardCSS">
                 <GoPerson  size={32} className=" rounded-sm ico"/>
                 <div className="ml-2">
@@ -49,7 +49,7 @@ const Valuecheck = useStates((s) => s.Valuecheck)
            <p className="AccountsTitle">I'm owed money</p>
            <span className={colorMap[savingstatus]}>{Savings}$</span>
           </div>
-          <div className="w-max ml-3">
+          <div className="ml-3">
               <div className="cardCSS">
                 <GoPerson size={32} className=" rounded-sm ico"/>
                 <div className="ml-2">

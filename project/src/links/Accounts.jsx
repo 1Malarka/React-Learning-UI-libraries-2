@@ -2,91 +2,107 @@ import { useStates } from "../States"
 import { CiCreditCard1, CiWallet, CiCirclePlus } from "react-icons/ci";
 import { HiOutlineWallet } from "react-icons/hi2";
 import { PiMoonStarsLight } from "react-icons/pi";
-
+import { Popover } from "radix-ui";
+import { PopoverAccounts } from "../components/ui/Short";
 
 function Accounts() {
-  const Valuecheck = useStates((s) => s.Valuecheck)
+  const accounts = useStates((s) => s.accounts)
+  const savings = useStates((s) => s.savings)
   const getStatus = useStates((s) => s.Value)
-  const status = getStatus(Valuecheck)
-  const Savings = useStates((s) => s.Savings)
-  const savingstatus = getStatus(Savings)
 
   const colorMap = {
-    profit: 'text-green-500',
-    neutral: 'text-gray-500',
-    loss: 'text-red-600',
+    profit: "text-green-500",
+    neutral: "text-gray-500",
+    loss: "text-red-600",
+  }
+
+  const iconMap = {
+    card: <CiCreditCard1 size={32} className="ico" />,
+    wallet: <CiWallet size={32} className="ico" />,
+    general: <HiOutlineWallet size={32} className="ico" />,
+    moon: <PiMoonStarsLight size={32} className="ico" />,
   }
 
   return (
-   <div>
-    <div className="mb-3">
+    <div>
+      <div className="mb-3">
+        <div className="flex justify-between">
+          <p className="AccountsTitle">Accounts</p>
+        </div>
+        <div className="ml-3">
+          {accounts.map((a) => {
+            const status = getStatus(a.value)
+            return (
+              <div key={a.id} className="cardCSS justify-between">
+                <div className="flex">
+                  {iconMap[a.icon]}
+                  <div className="ml-2">
+                    <p className="text-[15px] h-[19px]">{a.title}</p>
+                    <span className={colorMap[status]}>{a.value}$</span>
+                  </div>
+                </div>
+                <div className="flex mr-2">
+                <Popover.Root>
+		              <Popover.Trigger asChild>
+		                  <button
+	                		className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
+	                		aria-label="Update dimensions"
+	                  	>
+	              			⋮
+	              		</button>
+	              	</Popover.Trigger>
+                  <PopoverAccounts />
+                </Popover.Root>
+                </div>
+              </div>
+            )
+          })}
+          <div className="cardCSS cursor-pointer">
+            <CiCirclePlus size={32} className="ico"/>
+            <div className="ml-2">
+              <p className="text-[15px] h-[19px]">Add Account</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="flex justify-between">
-        <p className="AccountsTitle">Accounts</p>
-        <span className={colorMap[status]}>{Valuecheck}$</span>
+        <p className="AccountsTitle">Savings</p>
       </div>
-      <div className="w-max ml-3">
-        <div className="cardCSS">
-          <CiCreditCard1 size={32} className="rounded-sm ico"/>
-          <div className="ml-2">
-            <p className="text-[15px] h-[19px]">
-               Card
-            </p>
-            <span className={colorMap[status]}>{Valuecheck}$</span>
-          </div>
-        </div>
-        <div className="cardCSS">
-          <CiWallet size={32} className=" rounded-sm ico"/>
-          <div className="ml-2">
-            <p className="text-[15px] h-[19px]">
-               Cash
-            </p>
-            <span className={colorMap[status]}>{Valuecheck}$</span>
-          </div>
-        </div>
-        <div className="cardCSS">
-          <HiOutlineWallet  size={32} className=" rounded-sm ico"/>
-          <div className="ml-2">
-            <p className="text-[15px] h-[19px]">
-               General Account
-            </p>
-            <span className={colorMap[status]}>{Valuecheck}$</span>
-          </div>
-        </div>
+      <div className="ml-3">
+        {savings.map((s) => {
+          const status = getStatus(s.value)
+          return (
+            <div key={s.id} className="cardCSS justify-between">
+              <div className="flex">
+              {iconMap[s.icon]}
+              <div className="ml-2">
+                <p className="text-[15px] h-[19px]">{s.title}</p>
+                <span className={colorMap[status]}>{s.value}$</span>
+              </div>
+            </div>
+              <Popover.Root>
+		              <Popover.Trigger asChild>
+		                  <button
+	                		className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
+	                		aria-label="Update dimensions"
+	                  	>
+	              			⋮
+	              		</button>
+	              	</Popover.Trigger>
+                  <PopoverAccounts />
+                </Popover.Root>
+            </div>
+          )
+        })}
         <div className="cardCSS cursor-pointer">
-          <CiCirclePlus  size={32} className=" rounded-sm ico"/>
+          <CiCirclePlus size={32} className="ico"/>
           <div className="ml-2">
-            <p className="text-[15px] h-[19px]">
-               Add Account
-            </p>
+            <p className="text-[15px] h-[19px]">Add Savings Account</p>
           </div>
         </div>
       </div>
     </div>
-    
-    <div className="flex justify-between">
-     <p className="AccountsTitle">Savings</p>
-     <span className={colorMap[savingstatus]}>{Savings}$</span>
-    </div>
-    <div className="w-max ml-3">
-        <div className="cardCSS">
-          <PiMoonStarsLight  size={32} className=" rounded-sm ico"/>
-          <div className="ml-2">
-            <p className="text-[15px] h-[19px]">
-               For dream
-            </p>
-            <span className={colorMap[status]}>{Valuecheck}$</span>
-          </div>
-        </div>
-        <div className="cardCSS cursor-pointer">
-          <CiCirclePlus  size={32} className=" rounded-sm ico"/>
-          <div className="ml-2">
-            <p className="text-[15px] h-[19px]">
-               Add Savings Account
-            </p>
-          </div>
-        </div>
-    </div>
-   </div>
   )
 }
 

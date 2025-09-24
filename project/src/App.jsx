@@ -12,7 +12,8 @@ import { useStates } from "./States"
 function App() {
 const [activeTab, setActiveTab] = useState('accounts')
 const navigate = useNavigate()
-const Valuecheck = useStates((state) => state.Valuecheck)
+const Valuecheck = useStates((state) => state.getTotalWithoutGeneral())
+
 
 
   return (
@@ -24,23 +25,23 @@ const Valuecheck = useStates((state) => state.Valuecheck)
               <CardDescription className="text-base">Total Balance</CardDescription>
               <CardTitle>{Valuecheck}$</CardTitle>  
             </CardHeader>
-            <div className="w-full flex justify-between shadow-md mt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 shadow-md mt-2">
               <Button
-                className={`text-sm-black bg-0 w-32 ${activeTab === 'accounts' ? 'underline' : ''}`}
+                className={`w-full text-sm-black bg-0 ${activeTab === 'accounts' ? 'underline' : ''}`}
                 variant="link"
                 onClick={() => { setActiveTab('accounts'); navigate('/accounts') }}
               >
                 Accounts
               </Button>
               <Button
-                className={`text-sm-black bg-0 w-32 ${activeTab === 'debts' ? 'underline' : ''}`}
+                className={`w-full text-sm-black bg-0 ${activeTab === 'debts' ? 'underline' : ''}`}
                 variant="link"
                 onClick={() => { setActiveTab('debts'); navigate('/debts') }}
               >
                 Debts
               </Button>
               <Button
-                className={`text-sm-black bg-0 w-32 ${activeTab === 'total' ? 'underline' : ''}`}
+                className={`w-full text-sm-black bg-0 ${activeTab === 'total' ? 'underline' : ''}`}
                 variant="link"
                 onClick={() => { setActiveTab('total'); navigate('/total') }}
               >
