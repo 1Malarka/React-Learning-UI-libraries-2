@@ -153,6 +153,7 @@
 	padding: 10px;
 }
 
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

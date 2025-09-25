@@ -13,9 +13,7 @@ function App() {
 const [activeTab, setActiveTab] = useState('accounts')
 const navigate = useNavigate()
 const Valuecheck = useStates((state) => state.getTotalWithoutGeneral())
-
-
-
+  
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
