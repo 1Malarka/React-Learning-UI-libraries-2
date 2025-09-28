@@ -23,6 +23,16 @@ export const useStates = create(
         ]
       },
 
+   getAccountById: (id) => {
+    const account = get().accounts.find((a) => a.id === id)
+  return account ? account : null
+},
+
+   getSavingsById: (id) => {
+    const savings = get().savings.find((a) => a.id === id)
+  return savings ? savings : null
+},
+
       addAccount: (title, value = 0, icon = "wallet") =>
         set((state) => ({
           accounts: [
@@ -30,6 +40,45 @@ export const useStates = create(
             { id: nanoid(), title, value, icon }
           ]
         })),
+
+       removeAccount: (id) => set((state) => ({
+         accounts: state.accounts.filter((t) => t.id !== id)
+       })),
+
+       removeSavings: (id) => set((state) => ({
+         savings: state.savings.filter((t) => t.id !== id)
+       })),
+
+      editAccountValue: (id, newValueText) => {
+        if (!newValueText || newValueText.trim().length === 0) return;
+        const filtered = newValueText.replace(/[^0-9.-]/g, "");
+        const num = Number(filtered);
+
+        if (isNaN(num)) return;
+
+        set((state) => ({
+          accounts: state.accounts.map((t) =>
+          t.id === id ? { ...t, value: num } : t
+          ),
+          savings: state.savings.map((t) =>
+          t.id === id ? { ...t, value: num } : t
+        ),
+    }));
+},
+
+       editAccountName: (id, newNameText) => {
+        if (!newNameText || newNameText.trim().length === 0) return;
+
+        set((state) => ({
+          accounts: state.accounts.map((t) =>
+          t.id === id ? { ...t, title: newNameText } : t
+        ),
+          savings: state.savings.map((t) =>
+          t.id === id ? { ...t, title: newNameText } : t
+        ),
+    }));
+},
+
 
       addSaving: (title, value = 0, icon = "moon") =>
         set((state) => ({

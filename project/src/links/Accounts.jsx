@@ -34,7 +34,7 @@ function Accounts() {
             const status = getStatus(a.value)
             return (
               <div key={a.id} className="cardCSS justify-between">
-                <div className="flex">
+                <div className="flex items-center">
                   {iconMap[a.icon]}
                   <div className="ml-2">
                     <p className="text-[15px] h-[19px]">{a.title}</p>
@@ -43,15 +43,15 @@ function Accounts() {
                 </div>
                 <div className="flex mr-2">
                 <Popover.Root>
-		              <Popover.Trigger asChild>
-		                  <button
-	                		className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
-	                		aria-label="Update dimensions"
-	                  	>
-	              			⋮
-	              		</button>
-	              	</Popover.Trigger>
-                  <PopoverAccounts />
+                      <Popover.Trigger asChild>
+                          <button
+                        className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
+                        aria-label="Update dimensions"
+                        >
+                          ⋮
+                        </button>
+                      </Popover.Trigger>
+                  <PopoverAccounts id={a.id} />
                 </Popover.Root>
                 </div>
               </div>
@@ -74,7 +74,7 @@ function Accounts() {
           const status = getStatus(s.value)
           return (
             <div key={s.id} className="cardCSS justify-between">
-              <div className="flex">
+              <div className="flex items-center">
               {iconMap[s.icon]}
               <div className="ml-2">
                 <p className="text-[15px] h-[19px]">{s.title}</p>
@@ -82,15 +82,15 @@ function Accounts() {
               </div>
             </div>
               <Popover.Root>
-		              <Popover.Trigger asChild>
-		                  <button
-	                		className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
-	                		aria-label="Update dimensions"
-	                  	>
-	              			⋮
-	              		</button>
-	              	</Popover.Trigger>
-                  <PopoverAccounts />
+                      <Popover.Trigger asChild>
+                          <button
+                        className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
+                        aria-label="Update dimensions"
+                        >
+                          ⋮
+                        </button>
+                      </Popover.Trigger>
+                  <PopoverAccounts id={s.id} />
                 </Popover.Root>
             </div>
           )
