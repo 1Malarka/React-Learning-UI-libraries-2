@@ -3,7 +3,8 @@ import { CiCreditCard1, CiWallet, CiCirclePlus } from "react-icons/ci";
 import { HiOutlineWallet } from "react-icons/hi2";
 import { PiMoonStarsLight } from "react-icons/pi";
 import { Popover } from "radix-ui";
-import { PopoverAccounts } from "../components/ui/Short";
+import { Dialog } from "radix-ui";
+import { DialogAddAccount, PopoverAccounts, DialogAddSavingsAccount } from "../components/ui/Short";
 
 function Accounts() {
   const accounts = useStates((s) => s.accounts)
@@ -57,12 +58,20 @@ function Accounts() {
               </div>
             )
           })}
-          <div className="cardCSS cursor-pointer">
-            <CiCirclePlus size={32} className="ico"/>
-            <div className="ml-2">
-              <p className="text-[15px] h-[19px]">Add Account</p>
-            </div>
-          </div>
+        
+<Dialog.Root>
+  <Dialog.Trigger asChild>
+    <div className="cardCSS cursor-pointer">
+      <CiCirclePlus size={32} className="ico" />
+      <div className="ml-2">
+        <button className="text-[15px] h-[19px]">Add Account</button>
+      </div>
+    </div>
+  </Dialog.Trigger>
+
+  <DialogAddAccount />
+</Dialog.Root>
+
         </div>
       </div>
 
@@ -95,12 +104,18 @@ function Accounts() {
             </div>
           )
         })}
+<Dialog.Root>
+  <Dialog.Trigger asChild>
         <div className="cardCSS cursor-pointer">
           <CiCirclePlus size={32} className="ico"/>
           <div className="ml-2">
             <p className="text-[15px] h-[19px]">Add Savings Account</p>
           </div>
         </div>
+        </Dialog.Trigger>
+
+  <DialogAddSavingsAccount />
+</Dialog.Root>
       </div>
     </div>
   )

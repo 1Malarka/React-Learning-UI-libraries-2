@@ -33,7 +33,7 @@ export const useStates = create(
   return savings ? savings : null
 },
 
-      addAccount: (title, value = 0, icon = "wallet") =>
+      addAccount: (newNameText, value = 0, icon = "wallet")  =>
         set((state) => ({
           accounts: [
             ...state.accounts,

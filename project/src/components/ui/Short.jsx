@@ -3,6 +3,7 @@ import { Dialog } from "radix-ui";
 import { Popover } from "radix-ui";
 import { AnimatePresence, motion } from "motion/react"
 import { Button } from "./button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react";
 
 export function PopoverAccounts( { id } ) {
@@ -18,7 +19,6 @@ const removeAccount = useStates((state) => state.removeAccount)
 const removeSavings = useStates((state) => state.removeSavings)
 const editAccountValue = useStates((state) => state.editAccountValue)
 const editAccountName = useStates((state) => state.editAccountName)
-console.log(newValueText)
 
 
 
@@ -182,4 +182,196 @@ return (
 	</Dialog.Root>
 	</>
    )
+}
+
+export function DialogAddAccount() {
+const addAccount = useStates((state) => state.addAccount)
+const [newNameText, setNewNameText] = useState("")
+const [newValueText, setNewValueText] = useState("")
+	
+
+
+	return (
+		<Dialog.Portal>
+			<AnimatePresence>
+               <Dialog.Overlay key="overlay" className="fixed inset-0 bg-[#000] opacity-55 z-2" />
+			<Dialog.Content key="content" className="fixed left-1/2 top-1/2 z-3 ">
+				<motion.div
+		     key="motion"
+             initial={{ opacity: 0, scale: 0.96 }}   
+             animate={{ opacity: 1, scale: 1 }}     
+             exit={{ opacity: 0, scale: 0.96 }} 
+             transition={{ duration: 0.145, ease: "easeIn" }} 
+			 className="fixed left-1/2 top-1/2 z-3 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 
+                   rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none"
+             >
+				<Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+					Name Account
+				</Dialog.Title>
+				<Dialog.Description className="mb-5 mt-2.5 text-[15px] leading-normal text-gray-500">
+			  	  Name your account here. Click save changes when you're done.
+				</Dialog.Description>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="name"
+					>
+						Name
+					</label>
+					 <input
+                    className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					id="name"
+					placeholder="Example Cash/Card."
+                    onChange={(e) => setNewNameText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Value
+					</label>
+					<input
+						className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+						id="username"
+						defaultValue = "0"
+						onChange={(e) => setNewValueText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center text-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Icon
+					</label>
+                <Select>
+                   <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Theme" />
+                   </SelectTrigger>
+                   <SelectContent>
+                       <SelectItem value="card">Card</SelectItem>
+                       <SelectItem value="wallet">Wallet</SelectItem>
+                       <SelectItem value="general">General</SelectItem>
+					   <SelectItem value="moon">Moon</SelectItem>
+                   </SelectContent>
+                 </Select>
+				</fieldset>
+				<div className="mt-[25px] flex justify-end">
+					<Dialog.Close asChild>
+						<button onClick={() => addAccount(newNameText)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+							Save changes
+						</button>
+					</Dialog.Close>
+				</div>
+				<Dialog.Close asChild>
+					<button
+						className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 bg-gray3 hover:bg-violet4 focus:shadow-[0_0_0_1px] focus:shadow-violet7 focus:outline-none"
+						aria-label="Close"
+					> ✕
+					</button>
+				</Dialog.Close>
+			</motion.div>
+			</Dialog.Content>
+            </AnimatePresence>
+		</Dialog.Portal>
+		
+	)
+}
+
+export function DialogAddSavingsAccount() {
+const addAccount = useStates((state) => state.addAccount)
+const [newNameText, setNewNameText] = useState("")
+const [newValueText, setNewValueText] = useState("")
+	
+
+
+	return (
+		<Dialog.Portal>
+			<AnimatePresence>
+               <Dialog.Overlay key="overlay" className="fixed inset-0 bg-[#000] opacity-55 z-2" />
+			<Dialog.Content key="content" className="fixed left-1/2 top-1/2 z-3 ">
+				<motion.div
+		     key="motion"
+             initial={{ opacity: 0, scale: 0.96 }}   
+             animate={{ opacity: 1, scale: 1 }}     
+             exit={{ opacity: 0, scale: 0.96 }} 
+             transition={{ duration: 0.145, ease: "easeIn" }} 
+			 className="fixed left-1/2 top-1/2 z-3 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 
+                   rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none"
+             >
+				<Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+					Name Savings Account
+				</Dialog.Title>
+				<Dialog.Description className="mb-5 mt-2.5 text-[15px] leading-normal text-gray-500">
+			  	  Name your savings account here. Click save changes when you're done.
+				</Dialog.Description>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="name"
+					>
+						Name
+					</label>
+					 <input
+                    className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					id="name"
+					placeholder="Example for dream/vacation."
+                    onChange={(e) => setNewNameText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Value
+					</label>
+					<input
+						className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+						id="username"
+						defaultValue = "0"
+						onChange={(e) => setNewValueText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center text-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Icon
+					</label>
+                <Select>
+                   <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Theme" />
+                   </SelectTrigger>
+                   <SelectContent>
+                       <SelectItem value="card">Card</SelectItem>
+                       <SelectItem value="wallet">Wallet</SelectItem>
+                       <SelectItem value="general">General</SelectItem>
+					   <SelectItem value="moon">Moon</SelectItem>
+                   </SelectContent>
+                 </Select>
+				</fieldset>
+				<div className="mt-[25px] flex justify-end">
+					<Dialog.Close asChild>
+						<button onClick={() => addAccount(newNameText)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+							Save changes
+						</button>
+					</Dialog.Close>
+				</div>
+				<Dialog.Close asChild>
+					<button
+						className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 bg-gray3 hover:bg-violet4 focus:shadow-[0_0_0_1px] focus:shadow-violet7 focus:outline-none"
+						aria-label="Close"
+					> ✕
+					</button>
+				</Dialog.Close>
+			</motion.div>
+			</Dialog.Content>
+            </AnimatePresence>
+		</Dialog.Portal>
+		
+	)
 }
