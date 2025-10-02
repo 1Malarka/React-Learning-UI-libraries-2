@@ -33,7 +33,19 @@ export const useStates = create(
   return savings ? savings : null
 },
 
-      addAccount: (newNameText, value = 0, icon = "wallet")  =>
+   getOweById: (id) => {
+  const debt = get().debts.owe.find((a) => a.id === id)
+  return debt ? debt : null
+},
+
+
+   getOwedById: (id) => {
+  const debt = get().debts.owed.find((a) => a.id === id)
+  return debt ? debt : null
+},
+
+
+      addAccount: ( title, value = 0, icon = "wallet")  =>
         set((state) => ({
           accounts: [
             ...state.accounts,
@@ -79,16 +91,54 @@ export const useStates = create(
     }));
 },
 
+removeDebt: (type, id) =>
+  set((state) => ({
+    debts: {
+      ...state.debts,
+      [type]: state.debts[type].filter((t) => t.id !== id),
+    },
+  })),
 
-      addSaving: (title, value = 0, icon = "moon") =>
+editDebtValue: (type, id, newValue) => {
+  const num = Number(String(newValue).replace(/[^0-9.-]/g, ""));
+  if (isNaN(num)) return;
+  set((state) => ({
+    debts: {
+      ...state.debts,
+      [type]: state.debts[type].map((t) =>
+        t.id === id ? { ...t, value: num } : t
+      ),
+    },
+  }));
+},
+
+editDebtTitle: (type, id, newTitle) => {
+  if (!newTitle?.trim()) return;
+  set((state) => ({
+    debts: {
+      ...state.debts,
+      [type]: state.debts[type].map((t) =>
+        t.id === id ? { ...t, title: newTitle } : t
+      ),
+    },
+  }));
+},
+
+
+      addSaving: (title, value, icon) => {
+         if (!newNameText || newNameText.trim().length === 0) return;
+         
+
         set((state) => ({
           savings: [
             ...state.savings,
             { id: nanoid(), title, value, icon }
           ]
-        })),
+        
+        }));
+      },
 
-      addDebt: (type, title, value = 0, icon = "person") =>
+      addDebt: (type, title, value, icon ) =>
         set((state) => ({
           debts: {
             ...state.debts,
@@ -98,6 +148,21 @@ export const useStates = create(
             ]
           }
         })),
+
+        removeOwe: (id) => set((state) => ({
+  debts: {
+    ...state.debts,
+    owe: state.debts.owe.filter((t) => t.id !== id),
+  }
+})),
+
+removeOwed: (id) => set((state) => ({
+  debts: {
+    ...state.debts,
+    owed: state.debts.owed.filter((t) => t.id !== id),
+  }
+})),
+
 
       Value: (value) => {
         if (value > 0) return "profit"

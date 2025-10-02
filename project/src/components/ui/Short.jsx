@@ -89,8 +89,8 @@ return (
 						Name
 					</label>
 					 <input
-                    className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
-                    id="name"
+                    className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					id="name"
                     defaultValue={account ? account.title : savings.title}
                     onChange={(e) => setNewNameText(e.currentTarget.value)}
 					/>
@@ -103,8 +103,8 @@ return (
 						Value
 					</label>
 					<input
-						className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
-						id="username"
+						className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					    id="username"
 						defaultValue={account ? account.value : savings.value}
 						onChange={(e) => setNewValueText(e.currentTarget.value)}
 					/>
@@ -188,8 +188,8 @@ export function DialogAddAccount() {
 const addAccount = useStates((state) => state.addAccount)
 const [newNameText, setNewNameText] = useState("")
 const [newValueText, setNewValueText] = useState("")
-	
-
+const [newIcon, setNewIcon] = useState("")
+console.log(newIcon)
 
 	return (
 		<Dialog.Portal>
@@ -246,7 +246,7 @@ const [newValueText, setNewValueText] = useState("")
 					>
 						Icon
 					</label>
-                <Select>
+                <Select value={newIcon} onValueChange={(value) => setNewIcon(value)}>
                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Theme" />
                    </SelectTrigger>
@@ -260,7 +260,7 @@ const [newValueText, setNewValueText] = useState("")
 				</fieldset>
 				<div className="mt-[25px] flex justify-end">
 					<Dialog.Close asChild>
-						<button onClick={() => addAccount(newNameText)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+						<button onClick={() => addAccount(newNameText, newValueText, newIcon)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
 							Save changes
 						</button>
 					</Dialog.Close>
@@ -282,8 +282,11 @@ const [newValueText, setNewValueText] = useState("")
 
 export function DialogAddSavingsAccount() {
 const addAccount = useStates((state) => state.addAccount)
-const [newNameText, setNewNameText] = useState("")
-const [newValueText, setNewValueText] = useState("")
+const addSaving = useStates((state) => state.addSaving)
+const [title, setNewNameText] = useState("")
+const [value, setNewValueText] = useState()
+const [icon, setNewIcon] = useState("")
+console.log(icon, value)
 	
 
 
@@ -342,21 +345,21 @@ const [newValueText, setNewValueText] = useState("")
 					>
 						Icon
 					</label>
-                <Select>
+                <Select value={icon} onValueChange={(value) => setNewIcon(value)}>
                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Theme" />
                    </SelectTrigger>
                    <SelectContent>
-                       <SelectItem value="card">Card</SelectItem>
-                       <SelectItem value="wallet">Wallet</SelectItem>
-                       <SelectItem value="general">General</SelectItem>
-					   <SelectItem value="moon">Moon</SelectItem>
+                       <SelectItem value="card" >Card</SelectItem>
+                       <SelectItem value="wallet" >Wallet</SelectItem>
+                       <SelectItem value="general" >General</SelectItem>
+					   <SelectItem value="moon" >Moon</SelectItem>
                    </SelectContent>
                  </Select>
 				</fieldset>
 				<div className="mt-[25px] flex justify-end">
 					<Dialog.Close asChild>
-						<button onClick={() => addAccount(newNameText)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+						<button onClick={() => addSaving(title, value, icon)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
 							Save changes
 						</button>
 					</Dialog.Close>
@@ -375,3 +378,380 @@ const [newValueText, setNewValueText] = useState("")
 		
 	)
 }
+
+export function PopoverDebts( { id, type} ) {
+const [isEditOpen, setIsEditOpen] = useState(false)
+const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+const [newNameText, setNewNameText] = useState("")
+const [newValueText, setNewValueText] = useState("")
+const getOweById = useStates((state) => state.getOweById)
+const owe = getOweById(id)
+const getOwedById = useStates((state) => state.getOwedById)
+const owed = getOwedById(id)
+const removeOwe = useStates((state) => state.removeOwe)
+const removeOwed = useStates((state) => state.removeOwed)
+const editDebtValue = useStates((s) => s.editDebtValue)
+const editDebtTitle = useStates((s) => s.editDebtTitle)
+
+
+
+return (
+	<>
+    <Popover.Portal>
+			<Popover.Content
+				className="w-[100px] rounded bg-white p-1 shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2)] will-change-[transform,opacity] focus:shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2),0_0_0_2px_theme(colors.violet7)] data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade"
+				sideOffset={5}
+			>
+            <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -5 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -5 }}
+            transition={{ duration: 0.130, ease: "easeOut" }}
+            className=" rounded bg-white"
+             >
+                <Popover.Close asChild>
+				<div className="flex flex-col items-start ">
+					<fieldset className="flex items-center gap-5 text-left">
+						<Button className="cursor-pointer w-24 pl-0 font-normal" variant="ghost" onClick={() => { setIsEditOpen(true); getOweById(id); getOwedById(id)}}>
+							✏️Edit
+						</Button>
+					</fieldset>
+					<fieldset className="flex items-center">
+						<Button className="cursor-pointer w-full font-normal" variant="ghost" onClick={() => setIsDeleteOpen(true)}>
+							❌Delete
+						</Button>
+					</fieldset> 
+				</div>
+				</Popover.Close>
+              </motion.div>
+			</Popover.Content>
+		</Popover.Portal>
+
+
+        <Dialog.Root open={isEditOpen} onOpenChange={setIsEditOpen}>
+		<Dialog.Portal forceMount>
+			<AnimatePresence>
+             {isEditOpen && (
+			 <>
+			<Dialog.Overlay className="fixed inset-0 bg-[#000] opacity-55 z-2" />
+			 <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.135 }}
+            />
+			<Dialog.Content className="fixed left-1/2 top-1/2 z-3 ">
+				<motion.div
+             initial={{ opacity: 0, scale: 0.96 }}   
+             animate={{ opacity: 1, scale: 1 }}     
+             exit={{ opacity: 0, scale: 0.96 }} 
+             transition={{ duration: 0.145, ease: "easeIn" }} 
+			 className="fixed left-1/2 top-1/2 z-3 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 
+                   rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none"
+             ><Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+					Edit Debt
+				</Dialog.Title>
+				<Dialog.Description className="mb-5 mt-2.5 text-[15px] leading-normal text-gray-500">
+					Make changes to your debt here. Click save when you're done.
+				</Dialog.Description>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="name"
+					>
+						Name
+					</label>
+					 <input
+                    className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					id="name"
+                    defaultValue={owe ? owe.title : owed.title}
+                    onChange={(e) => setNewNameText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Value
+					</label>
+					<input
+						className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					    id="username"
+						defaultValue={owe ? owe.value : owed.value}
+						onChange={(e) => setNewValueText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<div className="mt-[25px] flex justify-end">
+					<Dialog.Close asChild>
+						<button className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none"
+						onClick={() => [editDebtValue(type, id, newValueText), editDebtTitle(type, id, newNameText)] }
+						>
+							Save changes
+						</button>
+					</Dialog.Close>
+				</div>
+				<Dialog.Close asChild>
+					<button
+						className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 bg-gray3 hover:bg-violet4 focus:shadow-[0_0_0_2px] focus:shadow-violet7 focus:outline-none"
+						aria-label="Close"
+					> ✕
+					</button>
+				</Dialog.Close>
+			</motion.div>
+			</Dialog.Content>
+			</>
+			 )}
+		 </AnimatePresence>
+		</Dialog.Portal>
+	</Dialog.Root>
+
+	<Dialog.Root open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+		<Dialog.Portal forceMount>
+			<AnimatePresence>
+             {isDeleteOpen && (
+			 <>
+			<Dialog.Overlay className="fixed inset-0 bg-[#000] opacity-55 z-2" />
+			 <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.135 }}
+            />
+			<Dialog.Content className="fixed left-1/2 top-1/2 z-3 ">
+				<motion.div
+             initial={{ opacity: 0, scale: 0.96 }}   
+             animate={{ opacity: 1, scale: 1 }}     
+             exit={{ opacity: 0, scale: 0.96 }} 
+             transition={{ duration: 0.145, ease: "easeIn" }} 
+			 className="fixed left-1/2 top-1/2 z-3 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 
+                   rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none"
+             ><Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+					Delete Account
+				</Dialog.Title>
+				<Dialog.Description className="mb-5 mt-2.5 text-[15px] leading-normal text-gray-500">
+			  	  <span className="font-bold">WARNING!!!</span>  This action CAN'T be undone. This will permanently delete account from everywhere.
+				</Dialog.Description>
+				<div className="mt-[25px] flex justify-end">
+					<Dialog.Close asChild>
+						<button onClick={() => {removeOwe(id); removeOwed(id)}} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+							Save changes
+						</button>
+					</Dialog.Close>
+				</div>
+				<Dialog.Close asChild>
+					<button
+						className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 bg-gray3 hover:bg-violet4 focus:shadow-[0_0_0_1px] focus:shadow-violet7 focus:outline-none"
+						aria-label="Close"
+					> ✕
+					</button>
+				</Dialog.Close>
+			</motion.div>
+			</Dialog.Content>
+			</>
+			 )}
+		 </AnimatePresence>
+		</Dialog.Portal>
+	</Dialog.Root>
+	</>
+   )
+}
+
+export function DialogAddLendor() {
+const addDebt = useStates((state) => state.addDebt)
+const [title, setNewNameText] = useState("")
+const [value, setNewValueText] = useState()
+const [icon, setNewIcon] = useState("")
+const type = "owe"
+console.log(title, icon, value)
+	
+
+
+	return (
+		<Dialog.Portal>
+			<AnimatePresence>
+               <Dialog.Overlay key="overlay" className="fixed inset-0 bg-[#000] opacity-55 z-2" />
+			<Dialog.Content key="content" className="fixed left-1/2 top-1/2 z-3 ">
+				<motion.div
+		     key="motion"
+             initial={{ opacity: 0, scale: 0.96 }}   
+             animate={{ opacity: 1, scale: 1 }}     
+             exit={{ opacity: 0, scale: 0.96 }} 
+             transition={{ duration: 0.145, ease: "easeIn" }} 
+			 className="fixed left-1/2 top-1/2 z-3 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 
+                   rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none"
+             >
+				<Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+					Name Lender
+				</Dialog.Title>
+				<Dialog.Description className="mb-5 mt-2.5 text-[15px] leading-normal text-gray-500">
+			  	  Name your lender here. Click save changes when you're done.
+				</Dialog.Description>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="name"
+					>
+						Name
+					</label>
+					 <input
+                    className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					id="name"
+					placeholder="David or Vincent"
+                    onChange={(e) => setNewNameText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Value
+					</label>
+					<input
+						className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+						id="username"
+						defaultValue = "0"
+						onChange={(e) => setNewValueText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center text-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Icon
+					</label>
+                <Select value={icon} onValueChange={(value) => setNewIcon(value)}>
+                   <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Theme" />
+                   </SelectTrigger>
+                   <SelectContent>
+                       <SelectItem value="card" >Card</SelectItem>
+                       <SelectItem value="wallet" >Wallet</SelectItem>
+                       <SelectItem value="general" >General</SelectItem>
+					   <SelectItem value="moon" >Moon</SelectItem>
+                   </SelectContent>
+                 </Select>
+				</fieldset>
+				<div className="mt-[25px] flex justify-end">
+					<Dialog.Close asChild>
+						<button onClick={() => addDebt("owed", title, value, icon)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+							Save changes
+						</button>
+					</Dialog.Close>
+				</div>
+				<Dialog.Close asChild>
+					<button
+						className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 bg-gray3 hover:bg-violet4 focus:shadow-[0_0_0_1px] focus:shadow-violet7 focus:outline-none"
+						aria-label="Close"
+					> ✕
+					</button>
+				</Dialog.Close>
+			</motion.div>
+			</Dialog.Content>
+            </AnimatePresence>
+		</Dialog.Portal>
+		
+	)
+}
+
+export function DialogAddDebtor() {
+const addDebt = useStates((state) => state.addDebt)
+const [title, setNewNameText] = useState("")
+const [value, setNewValueText] = useState()
+const [icon, setNewIcon] = useState("")
+const type = "owed"
+console.log(title, icon, value)
+	
+
+
+	return (
+		<Dialog.Portal>
+			<AnimatePresence>
+               <Dialog.Overlay key="overlay" className="fixed inset-0 bg-[#000] opacity-55 z-2" />
+			<Dialog.Content key="content" className="fixed left-1/2 top-1/2 z-3 ">
+				<motion.div
+		     key="motion"
+             initial={{ opacity: 0, scale: 0.96 }}   
+             animate={{ opacity: 1, scale: 1 }}     
+             exit={{ opacity: 0, scale: 0.96 }} 
+             transition={{ duration: 0.145, ease: "easeIn" }} 
+			 className="fixed left-1/2 top-1/2 z-3 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 
+                   rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none"
+             >
+				<Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+					Name Debtor
+				</Dialog.Title>
+				<Dialog.Description className="mb-5 mt-2.5 text-[15px] leading-normal text-gray-500">
+			  	  Name your debtor here. Click save changes when you're done.
+				</Dialog.Description>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="name"
+					>
+						Name
+					</label>
+					 <input
+                    className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+					id="name"
+					placeholder="Max or Maria"
+                    onChange={(e) => setNewNameText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Value
+					</label>
+					<input
+						className="text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+						id="username"
+						defaultValue = "0"
+						onChange={(e) => setNewValueText(e.currentTarget.value)}
+					/>
+				</fieldset>
+				<fieldset className="mb-[15px] flex items-center text-center gap-5">
+					<label
+						className="w-[90px] text-right text-[15px] text-gray-500"
+						htmlFor="username"
+					>
+						Icon
+					</label>
+                <Select value={icon} onValueChange={(value) => setNewIcon(value)}>
+                   <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Theme" />
+                   </SelectTrigger>
+                   <SelectContent>
+                       <SelectItem value="card" >Card</SelectItem>
+                       <SelectItem value="wallet" >Wallet</SelectItem>
+                       <SelectItem value="general" >General</SelectItem>
+					   <SelectItem value="moon" >Moon</SelectItem>
+                   </SelectContent>
+                 </Select>
+				</fieldset>
+				<div className="mt-[25px] flex justify-end">
+					<Dialog.Close asChild>
+						<button onClick={() => addDebt(type, title, value, icon)} className="inline-flex h-[35px] items-center justify-center rounded bg-gray-900 px-[15px] font-medium leading-none text-white outline-none outline-offset-1 hover:bg-green5 focus-visible:outline-2 focus-visible:outline-green6 select-none">
+							Save changes
+						</button>
+					</Dialog.Close>
+				</div>
+				<Dialog.Close asChild>
+					<button
+						className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 bg-gray3 hover:bg-violet4 focus:shadow-[0_0_0_1px] focus:shadow-violet7 focus:outline-none"
+						aria-label="Close"
+					> ✕
+					</button>
+				</Dialog.Close>
+			</motion.div>
+			</Dialog.Content>
+            </AnimatePresence>
+		</Dialog.Portal>
+		
+	)
+}
+

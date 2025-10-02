@@ -93,7 +93,7 @@ function Accounts() {
               <Popover.Root>
                       <Popover.Trigger asChild>
                           <button
-                        className="inline-flex cursor-pointer w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
+                        className="inline-flex cursor-pointer mr-2 w-5 items-center justify-center rounded-full bg-white text-violet11 outline-none"
                         aria-label="Update dimensions"
                         >
                           ⋮
